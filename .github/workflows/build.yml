@@ -39,9 +39,19 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Install dotnet-coverage
+        shell: powershell
+        run: |
+          New-Item -Path .\.dotnet-coverage -ItemType Directory
+          dotnet tool install dotnet-coverage --tool-path .\.dotnet
       - name: Build and analyze
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"waynekhan_unit-testing-using-dotnet-test_bf8666da-a1b8-4e04-81e6-8e2a6f4cd058" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner \
+            begin /k:"waynekhan_unit-testing-using-dotnet-test_bf8666da-a1b8-4e04-81e6-8e2a6f4cd058" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.vscoveragexml.reportsPath=coverage.xml \
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet build --no-incremental
+          .\.dotnet\dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
