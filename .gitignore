@@ -1,6 +1,6 @@
-dotCover.Output.html
-dotCover.Output/
-
-.sonarqube
 */bin/*
 */obj/*
+*/TestResults/*
+dotCover.Output.html
+dotCover.Output/
+.sonarqube
