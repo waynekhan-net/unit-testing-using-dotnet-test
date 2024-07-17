@@ -1,2 +1,6 @@
-bin/
-obj/
+dotCover.Output.html
+dotCover.Output/
+
+.sonarqube
+*/bin/*
+*/obj/*
