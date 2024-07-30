@@ -20,5 +20,14 @@ namespace Prime.Services
             }
             return true;
         }
+
+        public bool isEven(int candidate)
+        {
+            if (candidate % 2 == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
