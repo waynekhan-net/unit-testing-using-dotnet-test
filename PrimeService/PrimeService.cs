@@ -20,5 +20,10 @@ namespace Prime.Services
             }
             return true;
         }
+
+        public bool IsNaN(int candidate)
+        {
+            return false; // FIXME
+        }
     }
 }
