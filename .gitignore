@@ -3,4 +3,5 @@
 */TestResults/*
 dotCover.Output.html
 dotCover.Output/
-.sonarqube
+.scannerwork/
+.sonarqube/
