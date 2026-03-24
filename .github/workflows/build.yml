@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+     - name: Cache SonarQube packages
+       uses: actions/cache@v4
+       with:
+         path: ~\.sonar\cache
+         key: ${{ runner.os }}-sonar
+         restore-keys: ${{ runner.os }}-sonar
+     - name: Install SonarQube scanner
+       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+       shell: powershell
+       run: |
+         New-Item -Path .\.sonar\scanner -ItemType Directory
+         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+     - name: Build and analyze
+       shell: pwsh
+       run: |
+         # Fail fast and propagate errors to the runner
+         # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.5
+         $ErrorActionPreference = "Stop"
+         $PSNativeCommandUseErrorActionPreference = $true
+         .\.sonar\scanner\dotnet-sonarscanner begin /k:"example" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+         dotnet build
+         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
