@@ -2,9 +2,9 @@
 
 namespace Prime.Services
 {
-    public class PrimeService
+    public static class PrimeService
     {
-        public bool IsPrime(int candidate)
+        public static bool IsPrime(int candidate)
         {
             if (candidate < 2)
             {
@@ -21,7 +21,7 @@ namespace Prime.Services
             return true;
         }
 
-        public bool IsNaN(int candidate)
+        public static bool IsNaN(int candidate)
         {
             return false; // FIXME
         }
